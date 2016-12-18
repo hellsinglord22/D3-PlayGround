@@ -18,3 +18,9 @@ svg rect {
   padding: 3px;
   margin: 1px;
 }
+
+svg circle {
+  fill: steelblue; 
+  padding: 3px; 
+  margin: 1px; 
+}

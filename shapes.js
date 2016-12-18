@@ -1,39 +1,38 @@
-var dataArray = ['5', '11', '18']; 
+var dataArray = [2, 11, 15, 30, 36];
+var body = d3.select('body'); 
+var svg = body.append('svg').attr('width', '100%').attr('height', '100%'); 
 
-var svg = d3.select('body').append('svg')
-                                .attr('height', '100%')
-                                .attr('width', '100%'); 
+const padding = 20; 
+var scale = 1; 
+var horizontalStartPoint = 0; 
+var verticalStartPoint = 300; 
+var radius; 
 
-var rect = svg.selectAll('rect')
-                        .data(dataArray)
-                        .enter().append('rect')
-                        .attr('x', function(d, i){ return 50 + (i * 25) + 'px'; })
-                        .attr('y', function(d, i){ return 400 - (d * 15) + 'px';})
-                        .attr('width', '20px')
-                        .attr('height', function(d, i){ return (d * 15) + 'px'; });
 
-var label = d3.select('body').append('label')
-                                .attr('for', 'new')
-                                .html('Enter A New Data: '); 
+var circle = svg.selectAll('circle')
+                .data(dataArray)
+                .enter().append('circle');
+circle.attr('cy', verticalStartPoint) .attr('cx',  function (d, i){
+            radius = d * scale; 
+            center = radius + horizontalStartPoint; 
+            horizontalStartPoint += ( 2 * radius ) + padding; 
+            return center; 
+        })
+        .attr('r', function(d) { return d * scale; }); 
 
-var textArea = d3.select('body').append('input')
-                                .attr('type', 'text')
-                                .attr('name', 'new');
-
-var button = d3.select("body").append("button")
-                                .html('Click Me')
-                                .on('click', addNumberToArray); 
-
-function addNumberToArray(){
-        var textAreaInput = textArea.property('value');
-        var elementToPush; 
-        if (isNaN(textAreaInput)){
-                alert('fuck you, we need a number !');
-        } else if (textAreaInput == ''){
-                alert('Its empty bugger!!');
-        } else {
-               elementToPush = parseInt(textAreaInput);  
-               dataArray.push(elementToPush); 
-               console.log('the vale of the array: ', dataArray);
-        }
+function update(scale){
+    horizontalStartPoint = 0; 
+    circle.transition()
+            .duration(2000)
+            .delay(function(d, i) { return i * 25;})
+            .attr('cx',  function (d, i){
+                radius = d * scale; 
+                center = radius + horizontalStartPoint; 
+                horizontalStartPoint += ( 2 * radius ) + padding; 
+                return center; 
+            })
+            .attr('r', function(d) { return d * scale; });
 }
+
+update(5);
+
